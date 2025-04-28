@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cibercombatientes EMCC</title>
+    <style>
+        :root {
+            --azul-oscuro: #003366;
+            --dorado: #d4af37;
+            --rojo-error: #e63946;
+            --verde-exito: #2a9d8f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(-45deg, #f0f2f5, #e0e5ec, #d9e0e8, #f0f2f5);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Animación de texto "Cibercombatientes" */
+        @keyframes textoEpico {
+            0% { 
+                transform: scale(10) rotate(360deg); 
+                opacity: 0; 
+                text-shadow: 0 0 20px var(--dorado);
+            }
+            50% { 
+                transform: scale(1) rotate(0); 
+                opacity: 1; 
+                text-shadow: 0 0 10px var(--dorado), 0 0 20px var(--dorado);
+            }
+            100% { 
+                opacity: 0; 
+                transform: scale(0.5); 
+            }
+        }
+        
+        .animacion-entrada {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            animation: desaparecer 1s 3s forwards;
+        }
+        
+        .animacion-entrada h1 {
+            color: var(--dorado);
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: textoEpico 3s ease-out;
+        }
+        
+        @keyframes desaparecer {
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        /* Botón Administrar */
+        .btn-admin {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: var(--azul-oscuro);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-admin:hover {
+            background: #002244;
+            transform: translateY(-2px);
+        }
+        
+        /* Modal de contraseña */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-contenido {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: aparecer 0.5s ease-out;
+        }
+        
+        @keyframes aparecer {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .modal button {
+            padding: 10px 20px;
+            background: var(--azul-oscuro);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        /* Notificaciones */
+        .notificacion {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            z-index: 300;
+            animation: slideNotif 0.5s ease-out, fadeOut 0.5s 2.5s forwards;
+            display: none;
+        }
+        
+        @keyframes slideNotif {
+            from { top: -100px; }
+            to { top: 20px; }
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; }
+        }
+        
+        .exito {
+            background: var(--verde-exito);
+        }
+        
+        .error {
+            background: var(--rojo-error);
+        }
+        
+        /* Galería */
+        .contenedor {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .galeria-titulo {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--azul-oscuro);
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px var(--dorado), 0 0 20px rgba(212, 175, 55, 0.5);
+            animation: neonGlow 2s infinite alternate;
+        }
+        
+        @keyframes neonGlow {
+            from {
+                text-shadow: 0 0 10px var(--dorado), 0 0 20px rgba(212, 175, 55, 0.5);
+            }
+            to {
+                text-shadow: 0 0 15px var(--dorado), 0 0 30px rgba(212, 175, 55, 0.8), 0 0 40px var(--dorado);
+            }
+        }
+        
+        .galeria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .galeria-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            animation: zoomIn 0.6s ease-out;
+            animation-fill-mode: both;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        @keyframes zoomIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .galeria-item:nth-child(1) { animation-delay: 0.1s; }
+        .galeria-item:nth-child(2) { animation-delay: 0.2s; }
+        .galeria-item:nth-child(3) { animation-delay: 0.3s; }
+        .galeria-item:nth-child(4) { animation-delay: 0.4s; }
+        .galeria-item:nth-child(5) { animation-delay: 0.5s; }
+        .galeria-item:nth-child(6) { animation-delay: 0.6s; }
+        .galeria-item:nth-child(7) { animation-delay: 0.7s; }
+        .galeria-item:nth-child(8) { animation-delay: 0.8s; }
+        .galeria-item:nth-child(9) { animation-delay: 0.9s; }
+        .galeria-item:nth-child(10) { animation-delay: 1s; }
+        
+        .galeria-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            animation: borderColors 8s infinite linear;
+            pointer-events: none;
+        }
+        
+        @keyframes borderColors {
+            0% { border-color: var(--azul-oscuro); }
+            25% { border-color: var(--dorado); }
+            50% { border-color: var(--verde-exito); }
+            75% { border-color: var(--rojo-error); }
+            100% { border-color: var(--azul-oscuro); }
+        }
+        
+        .galeria-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .galeria-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+        
+        .galeria-info {
+            padding: 15px;
+            position: relative;
+        }
+        
+        .galeria-info h3 {
+            color: var(--azul-oscuro);
+            margin-bottom: 10px;
+        }
+        
+        /* Botón eliminar (solo visible para admin) */
+        .btn-eliminar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--rojo-error);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .modo-admin .btn-eliminar {
+            display: flex;
+        }
+        
+        /* Vista ampliada de foto */
+        .visor-foto {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 400;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .visor-foto.activo {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .visor-imagen {
+            max-width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+            margin-bottom: 20px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .visor-foto.activo .visor-imagen {
+            transform: scale(1);
+        }
+        
+        .visor-descripcion {
+            color: white;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 0 20px;
+        }
+        
+        .visor-cerrar {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .visor-cerrar:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(90deg);
+        }
+        
+        /* Formulario de subida (solo para admin) */
+        .form-subir {
+            display: none;
+            margin-top: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-subir input, .form-subir textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .form-subir button {
+            background: var(--azul-oscuro);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animación de entrada -->
+    <div class="animacion-entrada">
+        <h1>Cibercombatientes</h1>
+    </div>
+    
+    <!-- Botón Administrar -->
+    <button class="btn-admin" id="btnAdmin">Administrar</button>
+    
+    <!-- Contenido principal -->
+    <div class="contenedor">
+        <h1 class="galeria-titulo">Galería Cibercombatientes</h1>
+        
+        <div class="galeria-grid" id="galeria">
+            <!-- Las fotos se cargarán aquí con JavaScript -->
+        </div>
+        
+        <!-- Formulario para subir fotos (oculto inicialmente) -->
+        <div class="form-subir" id="formSubir">
+            <h2>Publicar Nueva Foto</h2>
+            <input type="file" id="nuevaFoto" accept="image/*">
+            <input type="text" id="tituloFoto" placeholder="Título de la foto">
+            <textarea id="descripcionFoto" placeholder="Descripción"></textarea>
+            <button id="btnPublicar">Publicar Foto</button>
+        </div>
+    </div>
+    
+    <!-- Visor de foto ampliada -->
+    <div class="visor-foto" id="visorFoto">
+        <span class="visor-cerrar" id="visorCerrar">&times;</span>
+        <img class="visor-imagen" id="visorImagen">
+        <div class="visor-descripcion" id="visorDescripcion"></div>
+    </div>
+    
+    <!-- Modal de contraseña -->
+    <div class="modal" id="modalPass">
+        <div class="modal-contenido">
+            <h2>Acceso Administrativo</h2>
+            <p>Ingrese el código de seguridad:</p>
+            <input type="password" id="inputPass" placeholder="Código">
+            <button id="btnVerificar">Verificar</button>
+        </div>
+    </div>
+    
+    <!-- Notificaciones -->
+    <div class="notificacion exito" id="notificacionExito">¡Acceso concedido! Puedes publicar.</div>
+    <div class="notificacion error" id="notificacionError">Error: Código incorrecto</div>
+    
+    <script>
+        // Elementos del DOM
+        const galeria = document.getElementById('galeria');
+        const btnAdmin = document.getElementById('btnAdmin');
+        const modalPass = document.getElementById('modalPass');
+        const btnVerificar = document.getElementById('btnVerificar');
+        const inputPass = document.getElementById('inputPass');
+        const formSubir = document.getElementById('formSubir');
+        const notificacionExito = document.getElementById('notificacionExito');
+        const notificacionError = document.getElementById('notificacionError');
+        const visorFoto = document.getElementById('visorFoto');
+        const visorImagen = document.getElementById('visorImagen');
+        const visorDescripcion = document.getElementById('visorDescripcion');
+        const visorCerrar = document.getElementById('visorCerrar');
+        
+        // Estado de administrador
+        let esAdmin = false;
+        
+        // Función para guardar fotos con límite
+        function guardarFotos(fotos) {
+            // Si hay más de 20 fotos, elimina las más antiguas
+            if (fotos.length > 20) {
+                fotos = fotos.slice(0, 20);
+            }
+            localStorage.setItem('galeriaCibercombatientes', JSON.stringify(fotos));
+            return fotos;
+        }
+
+        // Función para cargar fotos guardadas
+        function cargarFotosGuardadas() {
+            return JSON.parse(localStorage.getItem('galeriaCibercombatientes')) || [];
+        }
+        
+        // Cargar galería inicial
+        function cargarGaleria(fotos) {
+            galeria.innerHTML = '';
+            
+            if (fotos.length === 0) {
+                galeria.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No hay fotos en la galería todavía.</p>';
+                return;
+            }
+            
+            fotos.forEach((foto, index) => {
+                const item = document.createElement('div');
+                item.className = 'galeria-item';
+                item.style.animationDelay = `${index * 0.1}s`;
+                item.innerHTML = `
+                    <img src="${foto.img}" alt="${foto.titulo}" class="galeria-img">
+                    <div class="galeria-info">
+                        <button class="btn-eliminar" data-id="${index}">×</button>
+                        <h3>${foto.titulo}</h3>
+                        <p>${foto.desc}</p>
+                    </div>
+                `;
+                
+                // Añadir evento click para ampliar foto
+                item.addEventListener('click', (e) => {
+                    // Evitar que se active al hacer click en el botón eliminar
+                    if (!e.target.classList.contains('btn-eliminar')) {
+                        visorImagen.src = foto.img;
+                        visorDescripcion.innerHTML = `<h3>${foto.titulo}</h3><p>${foto.desc}</p>`;
+                        visorFoto.classList.add('activo');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+                
+                // Añadir evento para eliminar foto (solo en modo admin)
+                const btnEliminar = item.querySelector('.btn-eliminar');
+                btnEliminar.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    eliminarFoto(index);
+                });
+                
+                galeria.appendChild(item);
+            });
+        }
+        
+        // Función para eliminar una foto
+        function eliminarFoto(index) {
+            let fotos = cargarFotosGuardadas();
+            fotos.splice(index, 1);
+            guardarFotos(fotos);
+            cargarGaleria(fotos);
+            
+            // Mostrar notificación
+            const notif = document.createElement('div');
+            notif.className = 'notificacion exito';
+            notif.textContent = 'Foto eliminada correctamente';
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+        
+        // Cerrar visor de foto
+        visorCerrar.addEventListener('click', () => {
+            visorFoto.classList.remove('activo');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Cerrar al hacer click fuera de la imagen
+        visorFoto.addEventListener('click', (e) => {
+            if (e.target === visorFoto) {
+                visorFoto.classList.remove('activo');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Mostrar/ocultar modal
+        btnAdmin.addEventListener('click', () => {
+            modalPass.style.display = 'flex';
+            inputPass.focus();
+        });
+        
+        // Verificar contraseña
+        btnVerificar.addEventListener('click', () => {
+            if (inputPass.value === "Camilo.2025") {
+                esAdmin = true;
+                document.body.classList.add('modo-admin');
+                modalPass.style.display = 'none';
+                formSubir.style.display = 'block';
+                mostrarNotificacion(notificacionExito);
+            } else {
+                mostrarNotificacion(notificacionError);
+                inputPass.value = '';
+            }
+        });
+        
+        // Mostrar notificación
+        function mostrarNotificacion(notif) {
+            notif.style.display = 'block';
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Publicar nueva foto
+        document.getElementById('btnPublicar').addEventListener('click', function() {
+            const fileInput = document.getElementById('nuevaFoto');
+            const titulo = document.getElementById('tituloFoto').value;
+            const desc = document.getElementById('descripcionFoto').value;
+            
+            if (fileInput.files.length > 0 && titulo && desc) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Cargar fotos existentes
+                    let fotosActuales = cargarFotosGuardadas();
+                    
+                    // Añadir nueva foto al inicio
+                    fotosActuales.unshift({
+                        img: e.target.result,
+                        titulo: titulo,
+                        desc: desc
+                    });
+                    
+                    // Guardar aplicando el límite
+                    fotosActuales = guardarFotos(fotosActuales);
+                    cargarGaleria(fotosActuales);
+                    
+                    // Limpiar formulario
+                    fileInput.value = '';
+                    document.getElementById('tituloFoto').value = '';
+                    document.getElementById('descripcionFoto').value = '';
+                    
+                    // Notificación de éxito
+                    const notif = document.createElement('div');
+                    notif.className = 'notificacion exito';
+                    notif.textContent = '¡Foto publicada con éxito!';
+                    document.body.appendChild(notif);
+                    setTimeout(() => notif.remove(), 3000);
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                const notif = document.createElement('div');
+                notif.className = 'notificacion error';
+                notif.textContent = 'Por favor complete todos los campos';
+                document.body.appendChild(notif);
+                setTimeout(() => notif.remove(), 3000);
+            }
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const fotos = cargarFotosGuardadas();
+                cargarGaleria(fotos);
+            }, 4000);
+        });
+    </script>
+</body>
+</html>

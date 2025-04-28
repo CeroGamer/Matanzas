@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia de la EMCC Matanzas</title>
+    <style>
+        :root {
+            --dorado: #d4af37;
+            --azul-oscuro: #003366;
+            --blanco: #ffffff;
+            --sombra: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        /* Animación de entrada tipo "página de libro" */
+        @keyframes abrirLibro {
+            0% { transform: perspective(1000px) rotateY(90deg); opacity: 0; }
+            100% { transform: perspective(1000px) rotateY(0); opacity: 1; }
+        }
+        
+        .contenedor {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: abrirLibro 1.5s ease-out forwards;
+            transform-style: preserve-3d;
+        }
+        
+        /* Encabezado estilo placa militar */
+        .encabezado {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            padding: 20px;
+            background: linear-gradient(90deg, var(--azul-oscuro), #004080);
+            color: var(--blanco);
+            border-radius: 5px;
+            box-shadow: var(--sombra);
+            border-left: 10px solid var(--dorado);
+        }
+        
+        .encabezado h1 {
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .encabezado::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+        }
+        
+        /* Línea de tiempo interactiva */
+        .linea-tiempo {
+            position: relative;
+            padding: 40px 0;
+        }
+        
+        .linea-tiempo::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--dorado), var(--azul-oscuro));
+            transform: translateX(-50%);
+        }
+        
+        .evento {
+            position: relative;
+            width: 45%;
+            padding: 25px;
+            margin-bottom: 40px;
+            background: var(--blanco);
+            border-radius: 10px;
+            box-shadow: var(--sombra);
+            transition: all 0.5s ease;
+        }
+        
+        .evento:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .evento:nth-child(odd) {
+            margin-left: auto;
+        }
+        
+        .evento::before {
+            content: "";
+            position: absolute;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--dorado);
+            border: 4px solid var(--azul-oscuro);
+        }
+        
+        .evento:nth-child(even)::before {
+            left: -12px;
+        }
+        
+        .evento:nth-child(odd)::before {
+            right: -12px;
+        }
+        
+        .evento h3 {
+            color: var(--azul-oscuro);
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--dorado);
+            padding-bottom: 5px;
+        }
+        
+        .evento p {
+            color: #555;
+        }
+        
+        /* Efecto foto antigua */
+        .foto-historia {
+            width: 100%;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 8px solid var(--blanco);
+            box-shadow: 0 0 0 1px #ddd, 0 5px 20px rgba(0, 0, 0, 0.3);
+            filter: sepia(30%) contrast(110%);
+            transition: all 0.5s ease;
+        }
+        
+        .foto-historia:hover {
+            filter: sepia(0%) contrast(100%);
+            transform: scale(1.03);
+        }
+        
+        /* Botones */
+        .botones-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+        }
+        
+        .boton {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .boton-regreso {
+            background: linear-gradient(45deg, var(--azul-oscuro), #004080);
+            color: white;
+        }
+        
+        .boton-siguiente {
+            background: linear-gradient(45deg, #8e44ad, #9b59b6);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .boton-siguiente::after {
+            content: "→";
+            position: absolute;
+            right: -20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .boton-siguiente:hover::after {
+            right: 15px;
+            opacity: 1;
+        }
+        
+        .boton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .linea-tiempo::before {
+                left: 20px;
+            }
+            
+            .evento {
+                width: 90%;
+                margin-left: 40px !important;
+            }
+            
+            .evento::before {
+                left: -12px !important;
+                right: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <header class="encabezado">
+            <h1>Historia de la EMCC Matanzas</h1>
+            <p>Legado, tradición y excelencia desde 1985</p>
+        </header>
+        
+        <div class="linea-tiempo">
+            <!-- Evento 1 -->
+            <div class="evento">
+                <h3>1985: Fundación</h3>
+                <p>La EMCC Matanzas abre sus puertas como parte del sistema de escuelas militares "Camilo Cienfuegos", formando la primera generación de cadetes.</p>
+                <img src="fotos/graduacion_camilitos-intro.jpg" alt="Fundación EMCC" class="foto-historia">
+            </div>
+            
+            <!-- Evento 2 -->
+            <div class="evento">
+                <h3>1992: Primeros Graduados</h3>
+                <p>La promoción "Patria o Muerte" se convierte en la primera en completar el programa académico-militar.</p>
+            </div>
+            
+            <!-- Evento 3 -->
+            <div class="evento">
+                <h3>2001: Nueva Infraestructura</h3>
+                <p>Se inaugura el edificio principal con laboratorios modernizados y nuevas áreas deportivas.</p>
+                <img src="fotos/Edificio.jpg" alt="Edificio antiguo" class="foto-historia">
+            </div>
+            
+            <!-- Evento 4 -->
+            <div class="evento">
+                <h3>2015: 30 Aniversario</h3>
+                <p>Celebración del aniversario con la visita de altos mandos militares y exalumnos destacados.</p>
+            </div>
+            
+            <!-- Evento 5 -->
+            <div class="evento">
+                <h3>2020: Modernización</h3>
+                <p>Implementación del programa de informática bajo la dirección del.....</p>
+            </div>
+        </div>
+        
+        <!-- Botones de navegación ACTUALIZADOS -->
+        <div class="botones-container">
+            <a href="index1.html" class="boton boton-regreso">← Volver</a>
+            <a href="index4.html" class="boton boton-siguiente">Siguiente →</a>
+        </div>
+    </div>
+
+    <script>
+        // Efecto de carga
+        document.body.style.opacity = 0;
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 1s ease';
+                document.body.style.opacity = 1;
+            }, 100);
+            
+            // Animación escalonada de los eventos
+            const eventos = document.querySelectorAll('.evento');
+            eventos.forEach((evento, index) => {
+                evento.style.opacity = 0;
+                evento.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    evento.style.transition = `all 0.6s ease ${index * 0.2}s`;
+                    evento.style.opacity = 1;
+                    evento.style.transform = 'translateY(0)';
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
